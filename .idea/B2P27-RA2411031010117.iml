@@ -1,0 +1,163 @@
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.Deque;
+import java.util.ArrayDeque;
+
+public class PalindromeChecker {
+
+    // ================================
+    // Application Entry Point
+    // ================================
+    public static void main(String[] args) {
+        System.out.println("=================================");
+        System.out.println("      Palindrome Checker App     ");
+        System.out.println("      Version 2.0                ");
+        System.out.println("=================================\n");
+
+        uc2HardcodedCheck();
+        uc3ReverseString("racecar");
+        uc4CharArrayCheck("level");
+        uc5StackCheck("madam");
+        uc6QueueStackCheck("radar");
+        uc7DequeCheck("civic");
+    }
+
+    // ================================
+    // Utility Method - Normalize Input
+    // ================================
+    private static String normalize(String input) {
+        return input.toLowerCase().replaceAll("[^a-z0-9]", "");
+    }
+
+    // ================================
+    // UC2 - Simple Direct Check
+    // ================================
+    public static void uc2HardcodedCheck() {
+        System.out.println("UC2 - Simple Direct Check");
+
+        String word = "madam";
+        word = normalize(word);
+
+        String reversed = new StringBuilder(word).reverse().toString();
+        printResult(word, word.equals(reversed));
+    }
+
+    // ================================
+    // UC3 - Reverse String Method
+    // ================================
+    public static void uc3ReverseString(String input) {
+        System.out.println("UC3 - Reverse String Method");
+
+        input = normalize(input);
+        String reversed = new StringBuilder(input).reverse().toString();
+
+        printResult(input, input.equals(reversed));
+    }
+
+    // ================================
+    // UC4 - Two Pointer Method
+    // ================================
+    public static void uc4CharArrayCheck(String input) {
+        System.out.println("UC4 - Two Pointer Method");
+
+        input = normalize(input);
+        int left = 0;
+        int right = input.length() - 1;
+        boolean isPalindrome = true;
+
+        while (left < right) {
+            if (input.charAt(left) != input.charAt(right)) {
+                isPalindrome = false;
+                break;
+            }
+            left++;
+            right--;
+        }
+
+        printResult(input, isPalindrome);
+    }
+
+    // ================================
+    // UC5 - Stack Based Check
+    // ================================
+    public static void uc5StackCheck(String input) {
+        System.out.println("UC5 - Stack Based Check");
+
+        input = normalize(input);
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for (char c : input.toCharArray()) {
+            stack.addLast(c);
+        }
+
+        StringBuilder reversed = new StringBuilder();
+        while (!stack.isEmpty()) {
+            reversed.append(stack.removeLast());
+        }
+
+        printResult(input, input.equals(reversed.toString()));
+    }
+
+    // ================================
+    // UC6 - Queue + Stack Check
+    // ================================
+    public static void uc6QueueStackCheck(String input) {
+        System.out.println("UC6 - Queue + Stack Check");
+
+        input = normalize(input);
+        Queue<Character> queue = new LinkedList<>();
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for (char c : input.toCharArray()) {
+            queue.add(c);
+            stack.addLast(c);
+        }
+
+        boolean isPalindrome = true;
+
+        while (!queue.isEmpty()) {
+            if (!queue.remove().equals(stack.removeLast())) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        printResult(input, isPalindrome);
+    }
+
+    // ================================
+    // UC7 - Deque Optimized Check
+    // ================================
+    public static void uc7DequeCheck(String input) {
+        System.out.println("UC7 - Deque Optimized Check");
+
+        input = normalize(input);
+        Deque<Character> deque = new ArrayDeque<>();
+
+        for (char c : input.toCharArray()) {
+            deque.addLast(c);
+        }
+
+        boolean isPalindrome = true;
+
+        while (deque.size() > 1) {
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        printResult(input, isPalindrome);
+    }
+
+    // ================================
+    // Reusable Result Printer
+    // ================================
+    private static void printResult(String input, boolean isPalindrome) {
+        if (isPalindrome) {
+            System.out.println(input + " is a Palindrome\n");
+        } else {
+            System.out.println(input + " is NOT a Palindrome\n");
+        }
+    }
+}
